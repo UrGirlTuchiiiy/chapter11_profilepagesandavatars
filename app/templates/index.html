@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row text-center">
+        <h1 class="text-center"><b style="color: rosybrown;"><i><u>Shop</u></i></b></h1>
+        <div class="col-md-6">
+        
+           <img style="height: 300px; width: 300px;" src="{{ url_for('static', filename='images/watch.jpg') }}" alt="">
+            <p>
+                <b style="color: #664131;">KES 30,000</b> <br> <b style="color: #CFA899;">Apple Watch Gen 9 Series 9</b>
+            </p>
+        </div>
+        <div class="col-md-6">
+            <img style="height: 300px; width: 300px;" src="{{ url_for('static', filename='images/macbook.jpg') }}" alt="">
+            <p>
+                <b style="color: #513C3B">KES 250,000</b> <br> <b style="color: #E4B9A6;">MacBook Air 2021</b>
+            </p>
+        </div>
+    </div>
+{% endblock %}
