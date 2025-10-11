@@ -1,0 +1,8 @@
+# Chapter 9 Assessment
+
+ - Flask was used
+ - Two databases: addproduct and user
+ - OG project: Chapter 8 Web Forms [my repository](https://github.com/UrGirlTuchiiiy/chapter8_assessmentproject)
+ 
+
+ - thank you !🙏🏽
