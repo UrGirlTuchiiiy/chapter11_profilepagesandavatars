@@ -6,37 +6,38 @@
                 <!-- Empty column -->
         </div>
         <div class="col-md-4">
-            <h1 class="text-center"><b style="color: rosybrown;"><i><u>Add Product Form</u></i></b></h1>
+            <h2 class="text-center"><b style="color: rosybrown;"><i><u>Login Form</u></i></b></h2>
             <form action="" method="post" novalidate>
                 {{ form.hidden_tag() }}
                 <p>
-                    {{ form.product_name.label }} <br>
-                    {{ form.product_name(size=32) }} <br>
-                    {% for error in form.product_name.errors %}
+                    {{ form.username.label }} <br>
+                    {{ form.username(size=32) }} <br>
+                    {% for error in form.username.errors %}
                         <span style="color: red">
                             {{ error }}
                         </span>
                     {% endfor %}
                 </p>
                 <p>
-                    {{ form.product_description.label }} <br>
-                    {{ form.product_description(size=32) }} <br>
-                    {% for error in form.product_description.errors %}
+                    {{ form.password.label }} <br>
+                    {{ form.password(size=32) }} <br>
+                    {% for error in form.password.errors %}
                         <span style="color: red">
                             {{ error }}
                         </span>
                     {% endfor %}
                 </p>
                 <p>
-                    {{ form.available_stock.label }} <br>
-                    {{ form.available_stock }} <br>
-                    {% for error in form.available_stock.errors %}
-                        <span style="color: red">
-                            {{ error }}
-                        </span>
-                    {% endfor %}
+                    {{ form.remember_me() }} 
+                    {{ form.remember_me.label }}
                 </p>
                 <p>{{ form.submit }}</p>
+
+                <!-- New Here? Register link -->
+                <p class="text-center">
+                    New here? <a href="{{ url_for('register') }}">Register</a>
+                </p>
+
             </form>
         </div>
         <div class="col-md-4">
