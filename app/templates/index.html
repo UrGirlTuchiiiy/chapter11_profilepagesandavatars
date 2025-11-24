@@ -2,9 +2,42 @@
 
 {% block content %}
     <div class="row">
-        <div class="text-center">
-            Hello {{ current_user.username }}! These are the devices we provide. 🫧💋🦩
+        <div class="col-md-12">
+            <div class="text-center">
+                Hello {{ current_user.username }}! These are the devices we provide. 🫧💋🦩
+            </div>
+            <form action="" method="post" novalidate>
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.body.label }}<br>
+                    {{ form.body(cols=100, rows=4) }}<br>
+                    {% for error in form.body.errors %}
+                        <span style="color: red;">
+                            {{ error }}
+                        </span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.submit() }}
+                </p>
+            </form>
         </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            {% for post in posts %}
+                {% if post %}
+                    <table> 
+                        <tr valign="top">
+                            <td><img src="{{ post.author.avatar(36) }}" alt=""></td>
+                            <td>{{ post.author.username }} says: <br>{{ post.body }}</td>
+                        </tr>
+                    </table>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-6">
             <img style="height: 300px; width: 300px;" src="{{ url_for('static', filename='images/watch.jpg') }}" alt="">
             <p>

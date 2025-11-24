@@ -1,5 +1,5 @@
 from app import app, db
-from app.models import User
+from app.models import User, Post
 
 # This function enables easy access to the database instance (db) and User model in the Flask shell session.
 def make_shell_context():

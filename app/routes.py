@@ -1,16 +1,55 @@
 from app import app, db
-from app.models import User
-from flask_login import login_user, logout_user, login_required
-from flask import render_template, flash, redirect, url_for
-from app.forms import RegisterForm, LoginForm
+from app.models import User, Post
+from flask_login import login_user, logout_user, \
+    login_required, current_user
+from flask import render_template, flash, redirect,\
+     url_for, request
+from app.forms import RegisterForm, LoginForm, EditProfileForm, PostForm
+from datetime import datetime
 
 
-@app.route('/')
-@app.route('/home')
+@app.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    form = EditProfileForm()
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.about_me = form.about_me.data
+        db.session.commit()
+        flash('Your changes have been saved.')
+        return redirect(url_for('profile', username=current_user.username))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.about_me.data = current_user.about_me
+    return render_template(
+        'edit_profile.html', 
+        title='Edit Profile', 
+        form=form)
+        
+@app.before_request
+def before_request():
+    if current_user.is_authenticated:
+        current_user.last_seen = datetime.utcnow()
+        db.session.commit()
+
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/home', methods=['GET', 'POST'])
 @login_required
 def index():
     """Index URL"""
-    return render_template('index.html', title='Index Page')
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(body=form.body.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your post is now live!')
+        return redirect(url_for('index'))
+    posts = Post.query.all()    
+    return render_template(
+        'index.html',
+        title='Home',
+        form=form,
+        posts=posts)
 
 @app.route('/logout')
 def logout():
@@ -43,15 +82,16 @@ def register():
         db.session.commit()
         flash(f'You have been registered {form.username.data}')
         return redirect(url_for('login'))
-    return render_template('register.html', title='Register Page', form=form)
+    return render_template('register.html', title='Register Page', form=form)   
 
-@app.route('/addproduct', methods=['GET', 'POST'])
+@app.route('/<username>/profile') 
 @login_required
-def addproduct():
-    """Addproduct URL"""
-    form = AddproductForm()
-    if form.validate_on_submit():
-        flash(f'Your product has been saved')
-        return redirect(url_for('index'))
-    return render_template('addproduct.html', title='Add_Product', form=form)
-    
+def profile(username):
+    """About Me URL"""
+    user = User.query.filter_by(username=username).first_or_404()
+    posts = current_user.posts.all()
+    return render_template(
+        'profile.html', 
+        title='Profile Page', 
+        user=user,
+        posts=posts)       

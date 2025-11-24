@@ -18,18 +18,27 @@
     <div class="container text-center">
     <!-- Link -->
     <div class="row">
-        <div class="col-md-6">
-            <h2><a href="{{ url_for('index') }}" class="nav-link">iStreet Enterprises</a></h2>
+        <div class="col-md-4">
+            <h1><a href="{{ url_for('index') }}" class="nav-link">Home</a></h1>
         </div>
-        <div class="col-md-6">
-            {% if current_user.is_authenticated %}
-                <h2><a href="{{ url_for('logout') }}" class="nav-link">Logout</a></h2>
-            {% else %}
-                <h2><a href="{{ url_for('login') }}" class="nav-link">Login</a></h2>
-            {% endif %}
-        </div>
-
+        {% if current_user.is_authenticated %}
+            <div class="col-md-4">
+                <h1><a href="{{ url_for('profile', username=current_user.username) }}" class="nav-link">Profile</a></h1>
+            </div>
+            <div class="col-md-4">
+                <h1><a href="{{ url_for('logout') }}" class="nav-link">Logout</a></h1>
+            </div>
+        {% else %}
+            <div class="col-md-4">
+                <h1><a href="{{ url_for('login') }}" class="nav-link">Login</a></h1>
+            </div>
+            <div class="col-md-4">
+                <h1><a href="{{ url_for('register') }}" class="nav-link">Register</a></h1>
+            </div>
+        {% endif %}
     </div>
+    <hr>
+
     <!-- Beginning of flash message -->
      <div class="row text-center">`
         <div class="col-md-12">
