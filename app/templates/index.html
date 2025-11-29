@@ -1,68 +1,56 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-md-12">
-            <div class="text-center">
-                Hello {{ current_user.username }}! These are the devices we provide. 🫧💋🦩
-            </div>
-            <form action="" method="post" novalidate>
-                {{ form.hidden_tag() }}
-                <p>
-                    {{ form.body.label }}<br>
-                    {{ form.body(cols=100, rows=4) }}<br>
-                    {% for error in form.body.errors %}
-                        <span style="color: red;">
-                            {{ error }}
-                        </span>
-                    {% endfor %}
-                </p>
-                <p>
-                    {{ form.submit() }}
-                </p>
-            </form>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            {% for post in posts %}
-                {% if post %}
-                    <table> 
-                        <tr valign="top">
-                            <td><img src="{{ post.author.avatar(36) }}" alt=""></td>
-                            <td>{{ post.author.username }} says: <br>{{ post.body }}</td>
-                        </tr>
-                    </table>
+<div class="row">
+    <div class="col-md-12">
+        <table style="width:70%; border-collapse:collapse; border:2px solid #000; margin:auto; font-size:14px;">
+            <thead>
+                <tr style="border-bottom:2px solid #000;">
+                    <th style="border-right:2px solid #000; width:15%; text-align:left; padding:8px;">Avatar</th>
+                    <th style="border-right:2px solid #000; width:20%; text-align:left; padding:8px;">Username</th>
+                    <th style="border-right:2px solid #000; width:20%; text-align:left; padding:8px;">Comment</th>
+                    <th style="border-right:2px solid #000; width:20%; text-align:left; padding:8px;">Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for comment in comments %}
+                {% if comment %}
+                    <tr style="border-top:1px solid #000; border-bottom:1px solid #000;">
+                        <!-- Avatar -->
+                        <td style="border-right:2px solid #000; padding:7px;">
+                            <img src="{{ comment.author.avatar(64) }}" alt="avatar">
+                        </td>
+
+                        <!-- Username -->
+                        <td style="border-right:2px solid #000; font-weight:normal; padding:5px;">
+                            {{ comment.author.username }}
+                        </td>
+
+                        <!-- Post -->
+                        <td style="border-right:2px solid #000; font-weight:normal; padding:5px;">
+                            {{ comment.body }}
+                        </td>
+
+                        <!-- Timestamp -->
+                        <td style="border-right:2px solid #000; font-style:italic; padding:5px; color:#555;">
+                            {{ comment.timestamp.strftime('%Y-%m-%d %H:%M') }}
+                        </td>
+                    </tr>
                 {% endif %}
-            {% endfor %}
-        </div>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            <img style="height: 300px; width: 300px;" src="{{ url_for('static', filename='images/watch.jpg') }}" alt="">
-            <p>
-                <b style="color: #664131;">KES 30,000</b> <br> <b style="color: #CFA899;">Apple Watch Gen 9 Series 9</b>
-            </p>
-        </div>
-        <div class="col-md-6">
-            <img style="height: 300px; width: 300px;" src="{{ url_for('static', filename='images/macbook.jpg') }}" alt="">
-            <p>
-                <b style="color: #513C3B">KES 250,000</b> <br> <b style="color: #E4B9A6;">MacBook Air 2021</b>
-            </p>
-        </div>
+    {% if current_user.is_authenticated %}
+    <div>
+        <!--  -->
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            <img style="height: 300px; width: 300px;" src="{{ url_for('static', filename='images/iphone.jpg') }}" alt="">
-            <p>
-                <b style="color: #4A2E2B;">KES 120,000</b> <br> <b style="color: #D9B8B0;">iPhone 15 (256 GB)</b>
-            </p>
-        </div>
-        <div class="col-md-6">
-            <img style="height: 300px; width: 300px;" src="{{ url_for('static', filename='images/ipad.jpg') }}" alt="">
-            <p>
-                <b style="color: #5C3A38;">KES 80,000</b> <br> <b style="color: #CFA899;">iPad Air 11-inch</b>
-            </p>
-        </div>
+    {% else %}
+    <div>
+        <p class="text-center">
+            <a href="{{ url_for('login') }}">Login to post a comment</a>
+        </p>
     </div>
+    {% endif %}
+</div>
 {% endblock %}

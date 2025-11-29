@@ -1,10 +1,10 @@
 from app import app, db
-from app.models import User, Post
+from app.models import User, Comment
 from flask_login import login_user, logout_user, \
     login_required, current_user
 from flask import render_template, flash, redirect,\
      url_for, request
-from app.forms import RegisterForm, LoginForm, EditProfileForm, PostForm
+from app.forms import RegisterForm, LoginForm, EditProfileForm, CommentForm
 from datetime import datetime
 
 
@@ -34,22 +34,13 @@ def before_request():
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/home', methods=['GET', 'POST'])
-@login_required
 def index():
     """Index URL"""
-    form = PostForm()
-    if form.validate_on_submit():
-        post = Post(body=form.body.data, author=current_user)
-        db.session.add(post)
-        db.session.commit()
-        flash('Your post is now live!')
-        return redirect(url_for('index'))
-    posts = Post.query.all()    
+    comments = Comment.query.all()    
     return render_template(
         'index.html',
         title='Home',
-        form=form,
-        posts=posts)
+        comments=comments)
 
 @app.route('/logout')
 def logout():
@@ -84,14 +75,22 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register Page', form=form)   
 
-@app.route('/<username>/profile') 
+@app.route('/profile/<username>', methods=['GET', 'POST'])
 @login_required
 def profile(username):
-    """About Me URL"""
+    """Profile URL"""
     user = User.query.filter_by(username=username).first_or_404()
-    posts = current_user.posts.all()
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = Comment(body=form.body.data, author=current_user)
+        db.session.add(comment)
+        db.session.commit()
+        flash('Your comment is now live!')
+        return redirect(url_for('index'))
+    comments = Comment.query.all()    
     return render_template(
-        'profile.html', 
-        title='Profile Page', 
-        user=user,
-        posts=posts)       
+        'profile.html',
+        title='Profile',
+        form=form,
+        comments=comments,
+        user=user)

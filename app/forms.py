@@ -4,7 +4,6 @@ from wtforms import StringField, SubmitField, PasswordField, \
 from wtforms.validators import DataRequired, Length, EqualTo, Email
 
 
-
 class EditProfileForm(FlaskForm):
     """Edit Profile Form"""
     username = StringField('Username', validators=[DataRequired(), Length(1,64)])
@@ -26,7 +25,7 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
-class PostForm(FlaskForm):
+class CommentForm(FlaskForm):
     """Comment Form"""
-    body = TextAreaField('Body', validators=[DataRequired()])
-    submit = SubmitField('Post')
+    body = TextAreaField('Write a comment', validators=[DataRequired()])
+    submit = SubmitField('Comment')
